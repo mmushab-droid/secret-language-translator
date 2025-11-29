@@ -1,0 +1,339 @@
+<!DOCTYPE html>
+<html lang="id">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Translator Bahasa Rahasia</title>
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+        }
+        
+        body {
+            background: linear-gradient(135deg, #1a2a6c, #b21f1f, #fdbb2d);
+            color: white;
+            min-height: 100vh;
+            padding: 20px;
+        }
+        
+        .container {
+            max-width: 1000px;
+            margin: 0 auto;
+            padding: 20px;
+        }
+        
+        header {
+            text-align: center;
+            margin-bottom: 30px;
+            padding: 20px;
+            background: rgba(0, 0, 0, 0.3);
+            border-radius: 15px;
+            box-shadow: 0 5px 15px rgba(0, 0, 0, 0.2);
+        }
+        
+        h1 {
+            font-size: 2.5rem;
+            margin-bottom: 10px;
+            text-shadow: 2px 2px 4px rgba(0, 0, 0, 0.5);
+        }
+        
+        .subtitle {
+            font-size: 1.2rem;
+            opacity: 0.9;
+        }
+        
+        .translator-box {
+            display: flex;
+            flex-direction: column;
+            gap: 20px;
+            margin-bottom: 30px;
+        }
+        
+        @media (min-width: 768px) {
+            .translator-box {
+                flex-direction: row;
+            }
+        }
+        
+        .input-section, .output-section {
+            flex: 1;
+            background: rgba(255, 255, 255, 0.1);
+            backdrop-filter: blur(10px);
+            border-radius: 15px;
+            padding: 20px;
+            box-shadow: 0 5px 15px rgba(0, 0, 0, 0.2);
+        }
+        
+        h2 {
+            font-size: 1.5rem;
+            margin-bottom: 15px;
+            padding-bottom: 10px;
+            border-bottom: 2px solid rgba(255, 255, 255, 0.2);
+        }
+        
+        textarea {
+            width: 100%;
+            height: 200px;
+            background: rgba(255, 255, 255, 0.9);
+            border: none;
+            border-radius: 10px;
+            padding: 15px;
+            font-size: 1.1rem;
+            resize: none;
+            color: #333;
+            box-shadow: inset 0 2px 5px rgba(0, 0, 0, 0.1);
+        }
+        
+        textarea:focus {
+            outline: none;
+            box-shadow: inset 0 2px 5px rgba(0, 0, 0, 0.2), 0 0 0 2px #4dabf7;
+        }
+        
+        .controls {
+            display: flex;
+            justify-content: center;
+            gap: 15px;
+            margin: 20px 0;
+        }
+        
+        button {
+            padding: 12px 25px;
+            background: #4dabf7;
+            color: white;
+            border: none;
+            border-radius: 50px;
+            font-size: 1rem;
+            font-weight: bold;
+            cursor: pointer;
+            transition: all 0.3s ease;
+            box-shadow: 0 4px 10px rgba(0, 0, 0, 0.2);
+        }
+        
+        button:hover {
+            background: #339af0;
+            transform: translateY(-2px);
+            box-shadow: 0 6px 12px rgba(0, 0, 0, 0.3);
+        }
+        
+        button:active {
+            transform: translateY(0);
+        }
+        
+        .swap-btn {
+            background: #20c997;
+        }
+        
+        .swap-btn:hover {
+            background: #12b886;
+        }
+        
+        .dictionary {
+            background: rgba(255, 255, 255, 0.1);
+            backdrop-filter: blur(10px);
+            border-radius: 15px;
+            padding: 20px;
+            box-shadow: 0 5px 15px rgba(0, 0, 0, 0.2);
+            margin-top: 20px;
+        }
+        
+        .dictionary-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fill, minmax(100px, 1fr));
+            gap: 10px;
+            margin-top: 15px;
+        }
+        
+        .dictionary-item {
+            background: rgba(255, 255, 255, 0.15);
+            padding: 10px;
+            border-radius: 8px;
+            text-align: center;
+            transition: transform 0.2s;
+        }
+        
+        .dictionary-item:hover {
+            transform: scale(1.05);
+            background: rgba(255, 255, 255, 0.2);
+        }
+        
+        .symbol {
+            font-weight: bold;
+            font-size: 1.2rem;
+        }
+        
+        .letter {
+            font-size: 0.9rem;
+            opacity: 0.8;
+        }
+        
+        footer {
+            text-align: center;
+            margin-top: 30px;
+            padding: 20px;
+            font-size: 0.9rem;
+            opacity: 0.7;
+        }
+        
+        .example {
+            margin-top: 10px;
+            font-size: 0.9rem;
+            opacity: 0.8;
+        }
+        
+        .direction-info {
+            text-align: center;
+            margin: 10px 0;
+            font-weight: bold;
+            background: rgba(255, 255, 255, 0.2);
+            padding: 8px;
+            border-radius: 8px;
+        }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <header>
+            <h1>Translator Bahasa Rahasia</h1>
+            <p class="subtitle">Terjemahkan antara teks biasa dan sandi rahasia Anda</p>
+        </header>
+        
+        <div class="translator-box">
+            <div class="input-section">
+                <h2 id="inputLabel">Teks Normal</h2>
+                <textarea id="inputText" placeholder="Ketik teks di sini..."></textarea>
+                <p class="example">Contoh: halo dunia</p>
+            </div>
+            
+            <div class="output-section">
+                <h2 id="outputLabel">Kode Rahasia</h2>
+                <textarea id="outputText" placeholder="Hasil terjemahan akan muncul di sini..." readonly></textarea>
+                <p class="example">Contoh: -@/4 :!;8@</p>
+            </div>
+        </div>
+        
+        <div class="direction-info" id="directionInfo">Sedang menerjemahkan: Normal → Rahasia</div>
+        
+        <div class="controls">
+            <button id="swapBtn" class="swap-btn">⇄ Tukar Arah Terjemahan</button>
+        </div>
+        
+        <div class="dictionary">
+            <h2>Kamus Sandi Rahasia</h2>
+            <div class="dictionary-grid" id="dictionaryGrid">
+                <!-- Dictionary items will be generated by JavaScript -->
+            </div>
+        </div>
+        
+        <footer>
+            <p>Dibuat khusus untuk bahasa rahasia Anda | © 2023</p>
+        </footer>
+    </div>
+
+    <script>
+        // Sandi mapping
+        const cipherMap = {
+            'm': '?', 'n': '!', 'b': ';', 'v': ':', 'c': "'", 'x': '"', 
+            'z': '*', 'l': '/', 'k': ')', 'j': '(', 'h': '-', 'g': '&', 
+            'f': '_', 'd': '$', 's': '#', 'a': '@', 'p': '0', 'o': '9', 
+            'i': '8', 'u': '7', 'y': '6', 't': '5', 'r': '4', 'e': '3', 
+            'w': '2', 'q': '1'
+        };
+
+        // Membuat reverse mapping
+        const reverseCipherMap = {};
+        for (const [key, value] of Object.entries(cipherMap)) {
+            reverseCipherMap[value] = key;
+        }
+
+        // Elemen DOM
+        const inputText = document.getElementById('inputText');
+        const outputText = document.getElementById('outputText');
+        const swapBtn = document.getElementById('swapBtn');
+        const inputLabel = document.getElementById('inputLabel');
+        const outputLabel = document.getElementById('outputLabel');
+        const directionInfo = document.getElementById('directionInfo');
+        const dictionaryGrid = document.getElementById('dictionaryGrid');
+
+        // Status arah terjemahan (true = Normal ke Rahasia, false = Rahasia ke Normal)
+        let translateToSecret = true;
+
+        // Fungsi untuk menerjemahkan teks normal ke sandi
+        function translateToSecretFunc(text) {
+            return text.split('').map(char => {
+                const lowerChar = char.toLowerCase();
+                return cipherMap[lowerChar] || char;
+            }).join('');
+        }
+
+        // Fungsi untuk menerjemahkan sandi ke teks normal
+        function translateToNormalFunc(text) {
+            return text.split('').map(char => {
+                return reverseCipherMap[char] || char;
+            }).join('');
+        }
+
+        // Fungsi untuk memperbarui terjemahan
+        function updateTranslation() {
+            if (translateToSecret) {
+                outputText.value = translateToSecretFunc(inputText.value);
+            } else {
+                outputText.value = translateToNormalFunc(inputText.value);
+            }
+        }
+
+        // Fungsi untuk menukar arah terjemahan
+        function swapDirection() {
+            translateToSecret = !translateToSecret;
+            
+            // Update label
+            if (translateToSecret) {
+                inputLabel.textContent = "Teks Normal";
+                outputLabel.textContent = "Kode Rahasia";
+                directionInfo.textContent = "Sedang menerjemahkan: Normal → Rahasia";
+                inputText.placeholder = "Ketik teks normal di sini...";
+                outputText.placeholder = "Hasil kode rahasia akan muncul di sini...";
+            } else {
+                inputLabel.textContent = "Kode Rahasia";
+                outputLabel.textContent = "Teks Normal";
+                directionInfo.textContent = "Sedang menerjemahkan: Rahasia → Normal";
+                inputText.placeholder = "Ketik kode rahasia di sini...";
+                outputText.placeholder = "Hasil teks normal akan muncul di sini...";
+            }
+            
+            // Tukar nilai input dan output
+            const temp = inputText.value;
+            inputText.value = outputText.value;
+            outputText.value = temp;
+        }
+
+        // Event listeners
+        swapBtn.addEventListener('click', swapDirection);
+
+        // Auto-translate saat mengetik
+        inputText.addEventListener('input', updateTranslation);
+
+        // Generate dictionary grid
+        function generateDictionary() {
+            for (const [letter, symbol] of Object.entries(cipherMap)) {
+                const item = document.createElement('div');
+                item.className = 'dictionary-item';
+                item.innerHTML = `
+                    <div class="symbol">${symbol}</div>
+                    <div class="letter">${letter}</div>
+                `;
+                dictionaryGrid.appendChild(item);
+            }
+        }
+
+        // Initialize
+        generateDictionary();
+        
+        // Contoh awal
+        inputText.value = "halo dunia";
+        updateTranslation();
+    </script>
+</body>
+</html>
